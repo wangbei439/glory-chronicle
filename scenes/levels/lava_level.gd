@@ -1,4 +1,4 @@
-## 失落地脉关卡 - Beta v0.11
+## 失落地脉关卡 - Beta v0.12
 ## 设计文档§2.1：元素区域，服务"环境反应"
 ## 3房间滚动关卡，含熔岩池(触碰持续伤害)和间歇泉(定时喷发)
 ## 关底Boss：远古熔岩龟
@@ -21,6 +21,7 @@ var drop_system: Node2D
 var skill_tree: Node2D
 var inventory_ui: Node2D
 var equipment: Node2D
+var crafting_system: Node2D
 
 # 小怪（熔岩蜥蜴）
 var enemies: Array = []
@@ -186,6 +187,15 @@ func _build_scene() -> void:
         equipment.build()
         equipment.set_drop_system(drop_system)
 
+        # === 打造系统 ===
+        var craft_script = load("res://scripts/core/crafting_system.gd")
+        crafting_system = Node2D.new()
+        crafting_system.set_script(craft_script)
+        add_child(crafting_system)
+        crafting_system.load_save_data(GameState.crafting_materials)
+        crafting_system.set_ore_count(drop_system.ore_fragments)
+        equipment.set_crafting_system(crafting_system)
+
         # === 战士 ===
         var warrior_script = load("res://scripts/player/warrior.gd")
         warrior = Node2D.new()
@@ -247,7 +257,7 @@ func _build_scene() -> void:
 
         # === 版本/操作提示 ===
         var ver = Label.new()
-        ver.text = "v0.11"
+        ver.text = "v0.12"
         ver.position = Vector2(600, 350)
         ver.add_theme_font_size_override("font_size", 7)
         ver.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.6))
@@ -914,6 +924,10 @@ func _on_enemy_died(pos: Vector2) -> void:
         hud.show_perfect("+15 RAGE", Color(0.9, 0.5, 0.3)); audio.play("enemy_die")
         GameState.total_kills += 1
         drop_system.spawn_drop(pos, "wraith", GROUND_Y)
+        # v0.12: 地脉小怪稀有掉落（地脉结晶12%）
+        if randf() < 0.12:
+                GameState.crafting_materials["vein_crystal"] = int(GameState.crafting_materials.get("vein_crystal", 0)) + 1
+                hud.show_perfect("+1 地脉结晶!", Color(0.9, 0.6, 0.2))
 
 func _on_bat_hit_player(damage: float, knockback: Vector2) -> void: pass
 func _on_bat_died(pos: Vector2) -> void:
@@ -922,6 +936,10 @@ func _on_bat_died(pos: Vector2) -> void:
         hud.show_perfect("+10 RAGE", Color(1.0, 0.6, 0.3)); audio.play("enemy_die")
         GameState.total_kills += 1
         drop_system.spawn_drop(pos, "bat", GROUND_Y)
+        # v0.12: 地脉蝙蝠稀有掉落（地脉结晶10%）
+        if randf() < 0.10:
+                GameState.crafting_materials["vein_crystal"] = int(GameState.crafting_materials.get("vein_crystal", 0)) + 1
+                hud.show_perfect("+1 地脉结晶!", Color(0.9, 0.6, 0.2))
 
 func _cleanup_dead_enemies() -> void:
         for i in range(enemies.size() - 1, -1, -1):
@@ -970,6 +988,7 @@ func _save_state() -> void:
         var pickup_counts: Dictionary = drop_system.get_pickup_counts()
         GameState.save_pickup_counts(pickup_counts["ore_fragments"], pickup_counts["health_potions"], pickup_counts["rage_crystals"])
         GameState.current_level = "lava"
+        GameState.save_crafting_materials(crafting_system.get_save_data())
 
 func _save_and_quit() -> void:
         _save_state()

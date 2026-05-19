@@ -1,5 +1,5 @@
 ; Engine configuration file.
-; Project: 《代号：传说》 Beta v0.11
+; Project: 《代号：传说》 Beta v0.12
 
 [application]
 
@@ -16,8 +16,8 @@ SaveSystem="*res://scripts/core/save_system.gd"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/stretch/mode="viewport"
-window/stretch/aspect="keep"
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [input]
 

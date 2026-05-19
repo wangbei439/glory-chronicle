@@ -1,4 +1,4 @@
-## 幽影矿井关卡 - Beta v0.10
+## 幽影矿井关卡 - Beta v0.12
 ## 多房间滚动关卡：入口(640px)→矿道深处(640px)→Boss门前(640px)
 ## 总宽度1920px，摄像机跟随滚动
 ## v0.9: 多房间地图、矿车障碍、存档集成、物品栏
@@ -22,6 +22,7 @@ var drop_system: Node2D
 var skill_tree: Node2D
 var inventory_ui: Node2D
 var equipment: Node2D
+var crafting_system: Node2D
 
 # 小怪（矿工亡魂）
 var enemies: Array = []
@@ -170,6 +171,15 @@ func _build_scene() -> void:
         equipment.build()
         equipment.set_drop_system(drop_system)
 
+        # === 打造系统 ===
+        var craft_script = load("res://scripts/core/crafting_system.gd")
+        crafting_system = Node2D.new()
+        crafting_system.set_script(craft_script)
+        add_child(crafting_system)
+        crafting_system.load_save_data(GameState.crafting_materials)
+        crafting_system.set_ore_count(drop_system.ore_fragments)
+        equipment.set_crafting_system(crafting_system)
+
         # === 战士 ===
         var warrior_script = load("res://scripts/player/warrior.gd")
         warrior = Node2D.new()
@@ -227,7 +237,7 @@ func _build_scene() -> void:
 
         # === 版本/操作提示 ===
         var ver = Label.new()
-        ver.text = "v0.10"
+        ver.text = "v0.12"
         ver.position = Vector2(600, 350)
         ver.add_theme_font_size_override("font_size", 7)
         ver.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.6))
@@ -843,6 +853,10 @@ func _on_enemy_died(pos: Vector2) -> void:
         hud.show_perfect("+15 RAGE", Color(0.5, 0.8, 1.0)); audio.play("enemy_die")
         GameState.total_kills += 1
         drop_system.spawn_drop(pos, "wraith", GROUND_Y)
+        # v0.12: 小怪稀有掉落（暗影精华12%）
+        if randf() < 0.12:
+                GameState.crafting_materials["shadow_essence"] = int(GameState.crafting_materials.get("shadow_essence", 0)) + 1
+                hud.show_perfect("+1 暗影精华!", Color(0.6, 0.4, 0.8))
 
 func _on_bat_hit_player(damage: float, knockback: Vector2) -> void: pass
 func _on_bat_died(pos: Vector2) -> void:
@@ -851,6 +865,10 @@ func _on_bat_died(pos: Vector2) -> void:
         hud.show_perfect("+10 RAGE", Color(0.8, 0.5, 0.9)); audio.play("enemy_die")
         GameState.total_kills += 1
         drop_system.spawn_drop(pos, "bat", GROUND_Y)
+        # v0.12: 蝙蝠稀有掉落（暗影精华8%）
+        if randf() < 0.08:
+                GameState.crafting_materials["shadow_essence"] = int(GameState.crafting_materials.get("shadow_essence", 0)) + 1
+                hud.show_perfect("+1 暗影精华!", Color(0.6, 0.4, 0.8))
 
 func _cleanup_dead_enemies() -> void:
         for i in range(enemies.size() - 1, -1, -1):
@@ -898,6 +916,7 @@ func _save_state() -> void:
         GameState.save_resources(drop_system.ore_fragments, skill_tree.get_skill_data())
         var pickup_counts: Dictionary = drop_system.get_pickup_counts()
         GameState.save_pickup_counts(pickup_counts["ore_fragments"], pickup_counts["health_potions"], pickup_counts["rage_crystals"])
+        GameState.save_crafting_materials(crafting_system.get_save_data())
         GameState.current_level = "mine"
 
 func _save_and_quit() -> void:

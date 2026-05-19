@@ -1,4 +1,4 @@
-## 幽影矿井 Boss 战 - Beta v0.10
+## 幽影矿井 Boss 战 - Beta v0.12
 ## 矿脉甲虫 vs 战士 完整战斗
 ## v0.10: 装备系统加成、版本号同步
 extends Node2D
@@ -19,6 +19,7 @@ var audio: Node2D
 var drop_system: Node2D
 var skill_tree: Node2D
 var equipment: Node2D
+var crafting_system: Node2D
 
 # 视觉节点
 var player_sprite: AnimatedSprite2D
@@ -180,9 +181,18 @@ func _build_scene() -> void:
         equipment.build()
         equipment.set_drop_system(drop_system)
 
+        # === 打造系统 ===
+        var craft_script = load("res://scripts/core/crafting_system.gd")
+        crafting_system = Node2D.new()
+        crafting_system.set_script(craft_script)
+        add_child(crafting_system)
+        crafting_system.load_save_data(GameState.crafting_materials)
+        crafting_system.set_ore_count(drop_system.ore_fragments)
+        equipment.set_crafting_system(crafting_system)
+
         # 版本号
         var ver = Label.new()
-        ver.text = "v0.10"
+        ver.text = "v0.12"
         ver.position = Vector2(600, 350)
         ver.add_theme_font_size_override("font_size", 7)
         ver.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.6))
@@ -500,6 +510,9 @@ func _on_boss_died() -> void:
                 effects.spawn_rage_burst(boss.pos + Vector2(randf_range(-30, 30), randf_range(-40, 0)))
         # Boss掉落物品
         drop_system.spawn_drop(boss.pos, "boss", GROUND_Y)
+        # v0.12: Boss掉落打造材料（甲虫壳碎片x2）
+        GameState.crafting_materials["beetle_shell"] = int(GameState.crafting_materials.get("beetle_shell", 0)) + 2
+        hud.show_perfect("+2 甲虫壳碎片!", Color(0.3, 0.5, 0.8))
 
 func _on_boss_telegraph(attack_type: String, direction: float, duration: float) -> void:
         audio.play("telegraph", 0.5)
@@ -555,6 +568,10 @@ func _restart_battle() -> void:
         boss.super_armor = false
         boss.poise = boss.max_poise
         boss.change_state(0)  # IDLE
+
+        crafting_system.load_save_data(GameState.crafting_materials)
+        crafting_system.set_ore_count(drop_system.ore_fragments)
+        equipment.set_crafting_system(crafting_system)
 
         battle_intro = true
         battle_active = false
@@ -619,6 +636,7 @@ func _save_state() -> void:
         GameState.save_resources(drop_system.ore_fragments, skill_tree.get_skill_data())
         var pickup_counts: Dictionary = drop_system.get_pickup_counts()
         GameState.save_pickup_counts(pickup_counts["ore_fragments"], pickup_counts["health_potions"], pickup_counts["rage_crystals"])
+        GameState.save_crafting_materials(crafting_system.get_save_data())
 
 func _take_screenshot(filename: String) -> void:
         var img = get_viewport().get_texture().get_image()

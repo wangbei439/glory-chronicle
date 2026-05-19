@@ -1,4 +1,4 @@
-## 主菜单/标题画面 - Beta v0.11
+## 主菜单/标题画面 - Beta v0.12
 ## 游戏入口：标题动画、菜单选项、存档信息、背景粒子
 ## v0.11: 新增失落地脉关卡选项
 extends Node2D
@@ -115,7 +115,8 @@ func _build_scene() -> void:
         menu_data.append({"text": "开始冒险", "scene": "mine"})
         menu_data.append({"text": "失落地脉", "scene": "lava"})
         menu_data.append({"text": "训练场", "scene": "training"})
-        menu_data.append({"text": "Boss挑战", "scene": "boss"})
+        menu_data.append({"text": "Boss挑战(甲虫)", "scene": "boss"})
+        menu_data.append({"text": "Boss挑战(熔岩龟)", "scene": "lava_boss"})
 
         var start_y: float = 160
         for i in range(menu_data.size()):
@@ -136,7 +137,7 @@ func _build_scene() -> void:
 
         # === 底部信息 ===
         version_label = Label.new()
-        version_label.text = "Beta v0.11"
+        version_label.text = "Beta v0.12"
         version_label.position = Vector2(560, 345)
         version_label.add_theme_font_size_override("font_size", 7)
         version_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4, 0.5))
@@ -147,6 +148,9 @@ func _build_scene() -> void:
                 var info: Dictionary = SaveSystem.get_save_info()
                 save_info_label = Label.new()
                 var save_text: String = "存档: " + str(info.get("play_time", "")) + " | 击杀:" + str(info.get("total_kills", 0)) + " | 矿石:" + str(info.get("ore_fragments", 0))
+                var mat_text: String = str(info.get("materials", ""))
+                if mat_text != "":
+                        save_text += " | " + mat_text
                 save_info_label.text = save_text
                 save_info_label.position = Vector2(180, 330)
                 save_info_label.add_theme_font_size_override("font_size", 7)

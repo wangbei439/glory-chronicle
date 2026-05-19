@@ -1,4 +1,4 @@
-## 训练场 - Alpha v0.8
+## 训练场 - Beta v0.12
 ## 打击感增强版 + 连击计数 + 判定帧 + 粒子特效
 ## v0.8：版本号同步
 extends Node2D
@@ -295,7 +295,7 @@ func _build_hud() -> void:
         add_child(title)
 
         var ver = Label.new()
-        ver.text = "v0.8"
+        ver.text = "v0.12"
         ver.position = Vector2(590, 5)
         ver.add_theme_font_size_override("font_size", 7)
         ver.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.6))

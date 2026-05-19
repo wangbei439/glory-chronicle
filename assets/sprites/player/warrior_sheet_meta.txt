@@ -1,0 +1,12 @@
+# Warrior Sprite Sheet Metadata
+# Sheet size: 512x192
+# Frame size: 64x64
+
+idle=0,4,0,0
+run=4,4,4,0
+attack=8,4,0,1
+guard=12,2,4,1
+jump=14,2,6,1
+hurt=16,2,0,2
+war_cry=18,2,2,2
+earth_shatter=20,2,4,2

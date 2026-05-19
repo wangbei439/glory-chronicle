@@ -1,6 +1,6 @@
-## 主菜单/标题画面 - Alpha v0.9
+## 主菜单/标题画面 - Beta v0.11
 ## 游戏入口：标题动画、菜单选项、存档信息、背景粒子
-## v0.9新增：继续游戏选项、存档信息显示
+## v0.11: 新增失落地脉关卡选项
 extends Node2D
 
 # 菜单选项
@@ -21,6 +21,8 @@ const SCENES = {
         "training": "res://scenes/levels/training_ground.tscn",
         "mine": "res://scenes/levels/mine_level.tscn",
         "boss": "res://scenes/levels/boss_arena.tscn",
+        "lava": "res://scenes/levels/lava_level.tscn",
+        "lava_boss": "res://scenes/levels/lava_boss.tscn",
 }
 
 # 淡入淡出
@@ -111,6 +113,7 @@ func _build_scene() -> void:
         if SaveSystem.has_save:
                 menu_data.append({"text": "继续游戏", "scene": "continue"})
         menu_data.append({"text": "开始冒险", "scene": "mine"})
+        menu_data.append({"text": "失落地脉", "scene": "lava"})
         menu_data.append({"text": "训练场", "scene": "training"})
         menu_data.append({"text": "Boss挑战", "scene": "boss"})
 
@@ -133,7 +136,7 @@ func _build_scene() -> void:
 
         # === 底部信息 ===
         version_label = Label.new()
-        version_label.text = "Alpha v0.9"
+        version_label.text = "Beta v0.11"
         version_label.position = Vector2(560, 345)
         version_label.add_theme_font_size_override("font_size", 7)
         version_label.add_theme_color_override("font_color", Color(0.4, 0.4, 0.4, 0.5))

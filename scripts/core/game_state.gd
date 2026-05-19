@@ -42,6 +42,8 @@ const SCENES = {
         "training": "res://scenes/levels/training_ground.tscn",
         "mine": "res://scenes/levels/mine_level.tscn",
         "boss": "res://scenes/levels/boss_arena.tscn",
+        "lava": "res://scenes/levels/lava_level.tscn",
+        "lava_boss": "res://scenes/levels/lava_boss.tscn",
 }
 
 func _process(delta: float) -> void:

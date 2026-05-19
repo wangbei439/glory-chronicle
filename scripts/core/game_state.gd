@@ -1,5 +1,6 @@
-## 全局游戏状态 - Alpha v0.7
+## 全局游戏状态 - Alpha v0.8
 ## Autoload单例，跨场景保存玩家状态
+## v0.8新增：矿石碎片、技能等级持久化
 extends Node
 
 # === 玩家持久状态 ===
@@ -15,6 +16,14 @@ var levels_cleared: Dictionary = {}  # {"mine": true, "boss": true}
 var total_kills: int = 0
 var play_time: float = 0.0
 
+# === v0.8 新增：资源与技能 ===
+var ore_fragments: int = 0  # 矿石碎片（技能树货币）
+var skill_levels: Dictionary = {  # 技能等级
+        "attack_boost": 0,
+        "defense_boost": 0,
+        "rage_mastery": 0,
+}
+
 # === 关卡过渡 ===
 var transition_from: String = ""  # 来源关卡
 var transition_to: String = ""    # 目标关卡
@@ -22,44 +31,62 @@ var is_transitioning: bool = false
 
 # === 场景路径 ===
 const SCENES = {
-	"title": "res://scenes/menus/title_screen.tscn",
-	"training": "res://scenes/levels/training_ground.tscn",
-	"mine": "res://scenes/levels/mine_level.tscn",
-	"boss": "res://scenes/levels/boss_arena.tscn",
+        "title": "res://scenes/menus/title_screen.tscn",
+        "training": "res://scenes/levels/training_ground.tscn",
+        "mine": "res://scenes/levels/mine_level.tscn",
+        "boss": "res://scenes/levels/boss_arena.tscn",
 }
 
 func _process(delta: float) -> void:
-	play_time += delta
+        play_time += delta
 
 func save_player_state(hp: float, rage: float, hit_count: int) -> void:
-	player_hp = hp
-	player_rage = rage
-	player_hit_count = hit_count
+        player_hp = hp
+        player_rage = rage
+        player_hit_count = hit_count
+
+func save_resources(ore: int, skills: Dictionary) -> void:
+        """保存矿石碎片和技能等级"""
+        ore_fragments = ore
+        if skills.has("attack_boost"):
+                skill_levels["attack_boost"] = skills["attack_boost"]
+        if skills.has("defense_boost"):
+                skill_levels["defense_boost"] = skills["defense_boost"]
+        if skills.has("rage_mastery"):
+                skill_levels["rage_mastery"] = skills["rage_mastery"]
 
 func get_player_state() -> Dictionary:
-	return {
-		"hp": player_hp,
-		"max_hp": player_max_hp,
-		"rage": player_rage,
-		"max_rage": player_max_rage,
-		"hit_count": player_hit_count,
-	}
+        return {
+                "hp": player_hp,
+                "max_hp": player_max_hp,
+                "rage": player_rage,
+                "max_rage": player_max_rage,
+                "hit_count": player_hit_count,
+        }
 
 func reset_player_state() -> void:
-	player_hp = player_max_hp
-	player_rage = 0.0
-	player_hit_count = 0
+        player_hp = player_max_hp
+        player_rage = 0.0
+        player_hit_count = 0
+
+func reset_all_progress() -> void:
+        """完全重置所有进度"""
+        reset_player_state()
+        ore_fragments = 0
+        skill_levels = {"attack_boost": 0, "defense_boost": 0, "rage_mastery": 0}
+        levels_cleared = {}
+        total_kills = 0
 
 func mark_level_cleared(level_name: String) -> void:
-	levels_cleared[level_name] = true
+        levels_cleared[level_name] = true
 
 func go_to_level(level_name: String) -> void:
-	if SCENES.has(level_name):
-		transition_to = level_name
-		is_transitioning = true
-		current_level = level_name
-		get_tree().change_scene_to_file(SCENES[level_name])
+        if SCENES.has(level_name):
+                transition_to = level_name
+                is_transitioning = true
+                current_level = level_name
+                get_tree().change_scene_to_file(SCENES[level_name])
 
 func go_to_title() -> void:
-	current_level = ""
-	get_tree().change_scene_to_file(SCENES["title"])
+        current_level = ""
+        get_tree().change_scene_to_file(SCENES["title"])

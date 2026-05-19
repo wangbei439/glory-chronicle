@@ -1,6 +1,6 @@
-## 幽影矿井 Boss 战 - Alpha v0.7
+## 幽影矿井 Boss 战 - Alpha v0.8
 ## 矿脉甲虫 vs 战士 完整战斗
-## v0.7新增：摄像机跟随、音效系统、关卡过渡、Esc返回主菜单
+## v0.8新增：掉落系统、技能树效果、Boss掉落奖励
 extends Node2D
 
 const GROUND_Y: float = 309.0
@@ -16,6 +16,8 @@ var hud: Node2D
 var effects: Node2D
 var camera: Node2D
 var audio: Node2D
+var drop_system: Node2D
+var skill_tree: Node2D
 
 # 视觉节点
 var player_sprite: AnimatedSprite2D
@@ -150,9 +152,28 @@ func _build_scene() -> void:
         boss.boss_telegraph.connect(_on_boss_telegraph)
         boss.boss_attack_active.connect(_on_boss_attack_active)
 
+        # === 掉落系统 ===
+        var drop_script = load("res://scripts/core/drop_system.gd")
+        drop_system = Node2D.new()
+        drop_system.set_script(drop_script)
+        add_child(drop_system)
+        drop_system.set_player(warrior)
+        drop_system.set_hud(hud)
+        drop_system.set_audio(audio)
+        drop_system.ore_fragments = GameState.ore_fragments
+
+        # === 技能树 ===
+        var skill_script = load("res://scripts/ui/skill_tree.gd")
+        skill_tree = Node2D.new()
+        skill_tree.set_script(skill_script)
+        add_child(skill_tree)
+        skill_tree.build()
+        skill_tree.set_drop_system(drop_system)
+        skill_tree.load_skill_data(GameState.skill_levels)
+
         # 版本号
         var ver = Label.new()
-        ver.text = "v0.7"
+        ver.text = "v0.8"
         ver.position = Vector2(600, 350)
         ver.add_theme_font_size_override("font_size", 7)
         ver.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5, 0.6))
@@ -160,8 +181,8 @@ func _build_scene() -> void:
 
         # 操作提示
         var hint = Label.new()
-        hint.text = "A/D:移动 W/Space:跳跃 J:轻攻 K:重攻 L:格挡 U:战吼 I:裂地斩 R:重来 Esc:主菜单"
-        hint.position = Vector2(90, 350)
+        hint.text = "A/D:移动 W/Space:跳跃 J:轻攻 K:重攻 L:格挡 U:战吼 I:裂地斩 Tab:技能树 R:重来 Esc:主菜单"
+        hint.position = Vector2(50, 350)
         hint.add_theme_font_size_override("font_size", 7)
         hint.add_theme_color_override("font_color", Color(0.55, 0.55, 0.55, 0.7))
         add_child(hint)
@@ -177,9 +198,19 @@ func _build_scene() -> void:
 func _physics_process(delta: float) -> void:
         frame_count += 1
 
+        # 技能树打开时暂停游戏
+        if skill_tree.is_open:
+                skill_tree.process_input()
+                return
+
+        # Tab键打开技能树
+        if Input.is_key_pressed(KEY_TAB):
+                skill_tree.toggle()
+                return
+
         # Esc返回主菜单
         if Input.is_key_pressed(KEY_ESCAPE):
-                GameState.save_player_state(warrior.hp, warrior.rage, warrior.hit_count)
+                _save_state()
                 GameState.go_to_title()
                 return
 
@@ -248,8 +279,11 @@ func _physics_process(delta: float) -> void:
         # 更新摄像机
         camera.follow(warrior.pos, warrior.facing, delta)
 
+        # 掉落物
+        drop_system.process(delta)
+
         # 保存全局状态
-        GameState.save_player_state(warrior.hp, warrior.rage, warrior.hit_count)
+        _save_state()
 
         # 连招超时
         if warrior.combo_timer <= 0 and not warrior.is_attacking:
@@ -308,7 +342,8 @@ func _check_combat_collisions() -> void:
         # === 玩家攻击Boss ===
         if warrior.is_in_active_frames() and not boss_hit_applied:
                 if dist < 80:
-                        var dmg: float = warrior.get_attack_damage()
+                        var base_dmg: float = warrior.get_attack_damage()
+                        var dmg: float = base_dmg * skill_tree.get_attack_bonus()
                         boss.take_damage(dmg)
                         warrior.mark_hit_dealt()
                         boss_hit_applied = true
@@ -332,7 +367,7 @@ func _check_combat_collisions() -> void:
                         hud.spawn_damage_number(boss.pos + Vector2(0, -40), dmg, is_heavy)
 
                         var combo_info = warrior.get_attack_info()
-                        var rage_gain: float = 5.0 * combo_info.get("damage_mult", 1.0)
+                        var rage_gain: float = 5.0 * combo_info.get("damage_mult", 1.0) * skill_tree.get_rage_bonus()
                         if warrior.war_cry_buff:
                                 rage_gain *= 1.2
                         warrior.rage = min(warrior.max_rage, warrior.rage + rage_gain)
@@ -344,7 +379,8 @@ func _check_combat_collisions() -> void:
         # === Boss攻击玩家 ===
         if boss.is_in_attack_state() and boss.is_attack_active() and not player_hit_applied:
                 if dist < 85:
-                        var dmg: float = boss.get_attack_damage()
+                        var base_dmg: float = boss.get_attack_damage()
+                        var dmg: float = base_dmg * (1.0 - skill_tree.get_defense_bonus())
                         var kb: Vector2 = boss.get_attack_knockback()
                         warrior.take_damage(dmg, kb)
                         if dmg > 0:
@@ -439,6 +475,8 @@ func _on_boss_died() -> void:
         audio.play("level_up")
         for i in range(3):
                 effects.spawn_rage_burst(boss.pos + Vector2(randf_range(-30, 30), randf_range(-40, 0)))
+        # Boss掉落物品
+        drop_system.spawn_drop(boss.pos, "boss", GROUND_Y)
 
 func _on_boss_telegraph(attack_type: String, direction: float, duration: float) -> void:
         audio.play("telegraph", 0.5)
@@ -552,6 +590,10 @@ func _update_visuals() -> void:
 
         boss_sprite.position = boss.pos + Vector2(-16, -32) + shake
         boss_sprite.flip_h = (boss.facing < 0)
+
+func _save_state() -> void:
+        GameState.save_player_state(warrior.hp, warrior.rage, warrior.hit_count)
+        GameState.save_resources(drop_system.ore_fragments, skill_tree.get_skill_data())
 
 func _take_screenshot(filename: String) -> void:
         var img = get_viewport().get_texture().get_image()

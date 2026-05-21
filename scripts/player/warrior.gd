@@ -542,6 +542,10 @@ func do_attack(input_key: String) -> void:
         attack_phase = AttackPhase.STARTUP
         attack_hit_dealt = false
         combo_count += 1
+        # 攻击获得怒气
+        var rage_gain: float = combo_data.get("rage", 5)
+        rage = min(max_rage, rage + rage_gain)
+        rage_changed.emit(rage)
         hit_count += 1
         
         # 判断攻击类型：重击 vs 轻击
@@ -582,10 +586,10 @@ func do_attack(input_key: String) -> void:
         buffer_timer = 0
 
 func get_attack_damage() -> float:
-        """获取当前攻击的伤害值（含战吼增伤）"""
+        ## 获取当前攻击的伤害值（含战吼增伤）
         var key = ",".join(combo_sequence) if combo_sequence.size() > 0 else ""
         var info = combo_tree.get(key, {})
-        var base_mult: float = info.get("mult", 1.0) if info else 1.0
+        var base_mult: float = info.get("mult", 1.0) if info.size() > 0 else 1.0
         var dmg: float = 10.0 * base_mult
         
         # 完美判定加成
@@ -604,11 +608,11 @@ func get_attack_damage() -> float:
         return dmg
 
 func is_in_active_frames() -> bool:
-        """当前是否在攻击判定帧"""
+        ## 当前是否在攻击判定帧
         return is_attacking and attack_phase == AttackPhase.ACTIVE and not attack_hit_dealt
 
 func mark_hit_dealt() -> void:
-        """标记本次攻击已命中"""
+        ## 标记本次攻击已命中
         attack_hit_dealt = true
 
 func take_damage(dmg: float, knockback: Vector2) -> void:

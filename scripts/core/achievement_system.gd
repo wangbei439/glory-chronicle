@@ -162,7 +162,7 @@ func check_parry_achievements(count: int) -> void:
                 unlock("perfect_parry")
         if count >= 10:
                 unlock("perfect_parry_10")
-        stats["total_perfect_parries"] = max(stats["total_perfect_parries"], count)
+        stats["total_perfect_parries"] += count
 
 func check_no_damage_boss() -> void:
         unlock("no_damage_boss")
@@ -178,7 +178,7 @@ func check_ore_achievements(ore: int) -> void:
                 unlock("ore_100")
         if ore >= 500:
                 unlock("ore_500")
-        stats["total_ore_collected"] = max(stats["total_ore_collected"], ore)
+        stats["total_ore_collected"] += ore
 
 func check_class_achievement(cls_name: String) -> void:
         if not stats["classes_cleared"].has(cls_name):

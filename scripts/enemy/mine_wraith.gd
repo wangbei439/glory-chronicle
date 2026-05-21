@@ -239,7 +239,7 @@ func is_in_attack_active() -> bool:
 
 func _update_visuals(ground_y: float) -> void:
         if sprite:
-                sprite.position = pos + Vector2(-24, -64)
+                sprite.position = pos + Vector2(0, -32)
                 sprite.flip_h = (facing < 0)
                 # 受击闪烁
                 if current_state == State.HURT:

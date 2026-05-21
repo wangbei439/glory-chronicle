@@ -1264,7 +1264,7 @@ func _cleanup_dead_bats() -> void:
 
 func _update_visuals() -> void:
         var shake = camera_offset
-        player_sprite.position = player.pos + Vector2(-24, -64) + shake
+        player_sprite.position = player.pos + Vector2(0, -32) + shake
         player_sprite.flip_h = (player.facing < 0)
         if player.invincible_timer > 0:
                 player_sprite.visible = int(frame_count / 3) % 2 == 0

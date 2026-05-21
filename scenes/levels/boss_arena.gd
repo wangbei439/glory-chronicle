@@ -602,7 +602,7 @@ func _process_intro(delta: float) -> void:
         boss_sprite.flip_h = (boss.facing < 0)
 
         player_sprite.play("idle")
-        player_sprite.position = player.pos + Vector2(-24, -64) + camera_offset
+        player_sprite.position = player.pos + Vector2(0, -32) + camera_offset
 
         hud.show_boss_hp("矿脉甲虫")
         hud.update_boss_hp(boss.hp, boss.max_hp)
@@ -965,7 +965,7 @@ func _update_visuals() -> void:
         if player_shadow:
                 player_shadow.position = Vector2(player.pos.x - 14, GROUND_Y - 2) + shake
 
-        player_sprite.position = player.pos + Vector2(-24, -64) + shake
+        player_sprite.position = player.pos + Vector2(0, -32) + shake
         player_sprite.flip_h = (player.facing < 0)
 
         if player.invincible_timer > 0:

@@ -241,7 +241,8 @@ func _on_pickup(index: int) -> void:
                         if player and is_instance_valid(player):
                                 var rage_gain: float = 20.0
                                 player.rage = min(player.max_rage, player.rage + rage_gain)
-                                player.rage_changed.emit(player.rage)
+                                if player.has_signal("rage_changed"):
+                                        player.rage_changed.emit(player.rage)
                         msg = "+20 RAGE"
                         msg_color = Color(0.9, 0.4, 0.1)
                 ItemType.ORE_FRAGMENT:

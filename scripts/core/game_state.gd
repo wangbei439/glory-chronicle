@@ -142,7 +142,7 @@ func get_equipment_stats() -> Dictionary:
         var crafted_weapons: Dictionary = _get_crafted_weapon_stats(equipped_weapon)
         if crafted_weapons.size() > 0:
                 stats["attack_mult"] = crafted_weapons.get("attack_mult", 1.0)
-                stats["defense_mult"] *= crafted_weapons.get("defense_mult", 1.0)
+                stats["defense_mult"] = crafted_weapons.get("defense_mult", stats["defense_mult"])
                 stats["rage_bonus"] += crafted_weapons.get("rage_bonus", 0.0)
 
         # 打造装备护甲加成
@@ -161,6 +161,12 @@ func _get_crafted_weapon_stats(weapon_id: String) -> Dictionary:
                         return {"attack_mult": 1.8, "defense_mult": 0.9, "rage_bonus": 0.1}
                 "shadow_twin_blades":
                         return {"attack_mult": 1.5, "defense_mult": 1.0, "rage_bonus": 0.3}
+                "wraith_pick":
+                        return {"attack_mult": 1.3, "defense_mult": 1.0, "rage_bonus": 0.0}
+                "beetle_carapace_sword":
+                        return {"attack_mult": 1.5, "defense_mult": 0.9, "rage_bonus": 0.05}
+                "arcane_codex":
+                        return {"attack_mult": 2.0, "defense_mult": 0.8, "rage_bonus": 0.3}
         return {}
 
 func _get_crafted_armor_stats(armor_id: String) -> Dictionary:
@@ -170,6 +176,12 @@ func _get_crafted_armor_stats(armor_id: String) -> Dictionary:
                         return {"defense_mult": 0.6, "max_hp_bonus": 30.0, "rage_bonus": 0.0}
                 "vein_holy_garb":
                         return {"defense_mult": 0.65, "max_hp_bonus": 15.0, "rage_bonus": 0.2}
+                "shadow_cloak":
+                        return {"defense_mult": 0.8, "max_hp_bonus": 0.0, "rage_bonus": 0.2}
+                "beetle_shield":
+                        return {"defense_mult": 0.7, "max_hp_bonus": 15.0, "rage_bonus": 0.0}
+                "crystalline_aegis":
+                        return {"defense_mult": 0.55, "max_hp_bonus": 40.0, "rage_bonus": 0.1}
         return {}
 
 func get_player_state() -> Dictionary:

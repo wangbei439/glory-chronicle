@@ -1209,7 +1209,7 @@ func _cleanup_dead_bats() -> void:
 
 func _update_visuals() -> void:
         var shake: Vector2 = camera_offset
-        player_sprite.position = player.pos + Vector2(-24, -64) + shake
+        player_sprite.position = player.pos + Vector2(0, -32) + shake
         player_sprite.flip_h = (player.facing < 0)
         # 玩家阴影
         player_shadow.position = player.pos + Vector2(-16, -2) + shake

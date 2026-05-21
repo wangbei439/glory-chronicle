@@ -462,7 +462,7 @@ func get_telegraph_info() -> Dictionary:
 
 func _update_visuals(ground_y: float) -> void:
         if sprite:
-                sprite.position = pos + Vector2(-48, -64)  # 96x64居中
+                sprite.position = pos + Vector2(0, -32)  # 96x64居中
                 sprite.flip_h = (facing < 0)
                 # 狂暴闪烁
                 if phase == 2 and hp > 0:

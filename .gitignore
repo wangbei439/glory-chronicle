@@ -1,0 +1,19 @@
+# Python tools
+*.py
+tools/
+
+# Download/Upload temp
+download/
+upload/
+
+# Skills (non-game)
+skills/
+
+# Other Godot projects
+godot/
+
+# Godot cache
+.godot/
+
+# Environment
+.env

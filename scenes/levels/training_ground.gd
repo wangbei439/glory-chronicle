@@ -839,7 +839,7 @@ func _update_visuals(delta: float) -> void:
         if player_shadow:
                 player_shadow.position = Vector2(player_pos.x - 14, 307) + shake
 
-        player_sprite.position = player_pos + Vector2(-24, -64) + shake
+        player_sprite.position = player_pos + Vector2(0, -32) + shake
         player_sprite.flip_h = (f < 0)
 
         if war_cry_buff:

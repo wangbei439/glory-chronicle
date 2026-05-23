@@ -190,3 +190,31 @@ Stage Summary:
 - 主文档版本从v0.30升级到v0.31
 - PDF从735KB增长到1516KB
 - GitHub提交成功
+
+---
+Task ID: 7
+Agent: main
+Task: Godot实战第一天 - 核心战斗系统搭建
+
+Work Log:
+- 从零搭建角色移动系统（CharacterBody3D + 自定义InputMap: WASD/Space）
+- 实现攻击系统（Area3D hitbox + get_overlapping_bodies + await 2 physics_frame）
+- 实现闪避系统（K键/0.4s无敌/速度15/1s冷却）
+- 实现敌人AI三状态机（patrol/chase/attack）
+- 实现Boss三阶段战斗（60%/30%变色加速加伤）
+- 实现血条系统（MeshInstance3D QuadMesh + Unshaded材质）
+- 实现伤害数字浮动（Label3D + Tween动画）
+- 实现受击视觉反馈（modulate闪白 + 固定scale值）
+- 实现装备系统（EquipmentData Resource + PlayerStats类 + .tres资源文件）
+- 实现背包UI（Control/Panel/VBoxContainer + I键开关）
+- 实现装备掉落拾取（Area3D + OmniLight3D发光 + sin()浮动 + 品质颜色）
+- 修复11个关键bug（详见devlog踩坑记录）
+- 修复OmniLight3D.energy赋值报错（改用set()方法）
+- 生成今日开发日志文档 docs/devlog_2026-05-24.md
+- 推送到GitHub main分支
+
+Stage Summary:
+- 核心战斗循环跑通：移动→攻击→闪避→击杀→拾取→装备
+- 11个关键踩坑已记录（Sprite3D flip/physics_frame/InputMap/class_name等）
+- 开发日志已归档至docs/目录
+- 项目从设计阶段正式进入开发阶段

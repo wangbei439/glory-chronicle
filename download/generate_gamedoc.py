@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""生成《代号：传说》游戏设计文档 - Beta v0.36（含PVP/新手引导/社交/UI章节）"""
+"""生成《代号：传说》游戏设计文档 - Beta v0.37（含职业任务剧情+PVP/新手引导/社交/UI章节）"""
 
 import io, shutil
 from reportlab.lib.pagesizes import A4
@@ -159,9 +159,9 @@ def build_doc():
     story.append(Spacer(1, 8*mm))
     story.append(Paragraph('代号：传说', s_title))
     story.append(Spacer(1, 4*mm))
-    story.append(Paragraph('2.5D动作RPG游戏设计文档，涵盖技术架构、八大职业体系、完整技能树（一转/二转/三转）、跨职业配合、世界设定、小怪设计、Boss设计、装备系统、材料系统、天赋词条系统、任务剧情、NPC系统、数值框架、生活技能、副本系统、活动系统、隐藏内容、PVP系统、新手引导、社交系统、UI/UX设计。基于Godot 4.6.2引擎。', s_sub))
+    story.append(Paragraph('2.5D动作RPG游戏设计文档，涵盖技术架构、八大职业体系、完整技能树（一转/二转/三转）、跨职业配合、世界设定、小怪设计、Boss设计、装备系统、材料系统、天赋词条系统、任务剧情、NPC系统、数值框架、生活技能、副本系统、活动系统、隐藏内容、PVP系统、新手引导、社交系统、UI/UX设计、职业任务剧情。基于Godot 4.6.2引擎。', s_sub))
     story.append(Spacer(1, 10*mm))
-    ct = Table([['版本', 'Beta v0.36'], ['引擎', 'Godot 4.6.2'], ['类型', '2.5D 动作RPG']], colWidths=[40*mm, 60*mm])
+    ct = Table([['版本', 'Beta v0.37'], ['引擎', 'Godot 4.6.2'], ['类型', '2.5D 动作RPG']], colWidths=[40*mm, 60*mm])
     ct.setStyle(TableStyle([('FONTNAME',(0,0),(-1,-1),'SansSC'),('FONTSIZE',(0,0),(-1,-1),10),('TEXTCOLOR',(0,0),(0,-1),HexColor('#888')),('TEXTCOLOR',(1,0),(1,-1),CD),('ALIGN',(0,0),(0,-1),'RIGHT'),('ALIGN',(1,0),(1,-1),'LEFT'),('TOPPADDING',(0,0),(-1,-1),4),('BOTTOMPADDING',(0,0),(-1,-1),4),('LINEBELOW',(0,0),(-1,-2),0.5,HexColor('#eee'))]))
     story.append(ct)
     story.append(Spacer(1, 15*mm))
@@ -450,6 +450,10 @@ def build_doc():
     story.append(Paragraph('UI系统提供以下可访问性选项：文字大小调节（小/中/大/特大）、色盲模式（为红绿色盲替换伤害数字颜色）、按键自定义（所有操作都可以重新绑定）、自动战斗辅助（开启后自动释放基础攻击，但不会自动使用技能，适合手部不便的玩家）、屏幕震动开关（关闭后战斗中画面不再震动，适合3D晕眩玩家）、信息密度调节（低密度模式隐藏大部分即时信息，只保留HP和技能冷却）。这些选项在首次进入游戏时不会强制选择，而是在设置菜单中随时可调，尊重玩家的自主选择权。', s_body))
 
     # ═══ 更新版本号 ═══
+    # ═══ 二十四、职业任务剧情（原独立文档融入） ═══
+    from quest_data import add_quest_chapter
+    add_quest_chapter(story, s_h1, s_h2, s_h3, s_body, s_cap, mk_table, ColorBar, CP, pw, mm, Paragraph, Spacer)
+
     doc.build(story)
     print(f"PDF generated: {output}")
 

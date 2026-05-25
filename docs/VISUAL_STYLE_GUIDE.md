@@ -183,13 +183,30 @@ CFG：7
 ### 7.2 通用正面提示词骨架
 
 ```
-masterpiece, best quality, pixel art, sprite, {角色/场景描述}, {区域色温关键词}, dark fantasy atmosphere, high contrast, vibrant accent colors, clear silhouette, 3/4 side view, detailed equipment, {职业/区域特定关键词}
+(pixel art, dithering, pixelated, sprite art, 8-bit:1.2), masterpiece, best quality, {性别标签}, solo, full body full length sprite of {角色描述}, A-pose, standing on ground with feet visible, front 3/4 angle viewed from left, face and chest clearly visible facing camera, body oriented toward right side of frame, {装备/衣物描述}, dark fantasy style, black background, high contrast, vibrant {职业主色} accent, clear silhouette
 ```
 
-### 7.3 通用负面提示词
+### 7.3 性别强化标签（Illustrious/Danbooru 体系）
+
+**⚠️ 重要：必须使用 Danbooru 性别标签，自然语言的 male/female 对 Illustrious 架构几乎无效！**
+
+| 性别 | 正面标签 | 追加负面标签 |
+|------|----------|-------------|
+| 男性 | `(1boy:1.5), solo, male, boyish face, flat chest, broad shoulders, masculine features, no breasts` | `1girl, female, woman, girl, breasts, feminine, girly, long eyelashes, lipstick, curvy, hourglass figure, feminine hips, makeup, dress, skirt` |
+| 女性 | `(1girl:1.5), solo, female, feminine face, slender build` | `1boy, male, man, boy, muscular, broad shoulders, flat chest, masculine, facial hair, beard, mustache, stubble` |
+
+**权重调整**：如果仍偏女性，逐步加大 `(1boy:1.5)` → `(1boy:1.8)` → 额外加 `(flat chest:1.3), (no breasts:1.3)`
+
+### 7.4 通用负面提示词
 
 ```
-lowres, bad anatomy, bad hands, blurry, realistic, photograph, 3d render, text, watermark, signature, jpeg artifacts, extra limbs, deformed, messy lines, anti-aliased, smooth edges, gradient, soft shading, watercolor, oil painting, sketch, lineart only
+modern, recent, anime, illustration, cartoon, graphic, text, painting, abstract, glitch, deformed, mutated, ugly, disfigured, long body, lowres, bad anatomy, bad hands, missing fingers, extra digits, cropped, very displeasing, (worst quality, bad quality:1.2), sketch, jpeg artifacts, signature, watermark, username, simple background, conjoined, bad ai-generated, back view, rear view, facing away, from behind, showing back, half body, upper body only, cropped body, cut off, no legs, no feet, close-up, portrait, head shot, bust shot, waist up
+```
+
+### 7.5 无装备素体负面追加（生成素体时追加到通用负面）
+
+```
+weapon, sword, axe, bow, staff, shield, armor, helmet, plate armor, chainmail, heavy armor, weapon on back, quiver, cloak, hood, mask, goggles
 ```
 
 ---

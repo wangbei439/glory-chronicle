@@ -60,34 +60,34 @@ Size: 1024x1024
 
 **{Prompt}**：
 ```
-(1boy:1.5), solo, full body sprite of male human, plain linen underwear, bare arms and legs, short brown hair, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character
+(1boy:1.5), solo, full body sprite of male human, plain linen underwear, bare arms and legs, short brown hair, head up looking forward, upright posture, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character
 ```
 
 **完整正面**：
 ```
-masterpiece, best quality, amazing quality, 4k, very aesthetic, ultra-detailed, (pixel art, dithering, pixelated, sprite art, 8-bit:1.2), (1boy:1.5), solo, full body sprite of male human, plain linen underwear, bare arms and legs, short brown hair, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character, BREAK, depth of field, volumetric lighting
+masterpiece, best quality, amazing quality, 4k, very aesthetic, ultra-detailed, (pixel art, dithering, pixelated, sprite art, 8-bit:1.2), (1boy:1.5), solo, full body sprite of male human, plain linen underwear, bare arms and legs, short brown hair, head up looking forward, upright posture, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character, BREAK, depth of field, volumetric lighting
 ```
 
-**负面（官方 + 性别反制 + 装备反制）**：
+**负面（官方 + 性别反制 + 姿势反制 + 装备反制）**：
 ```
-modern, recent, old, oldest, anime, illustration, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured, long body, lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, cropped, very displeasing, (worst quality, bad quality:1.2), sketch, jpeg artifacts, signature, watermark, username, signature, simple background, conjoined, bad ai-generated, 1girl, breasts, feminine, back view, half body, armor, weapon, helmet, cape, boots, gauntlet, shield, equipment, decoration
+modern, recent, old, oldest, anime, illustration, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured, long body, lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, cropped, very displeasing, (worst quality, bad quality:1.2), sketch, jpeg artifacts, signature, watermark, username, signature, simple background, conjoined, bad ai-generated, 1girl, breasts, feminine, back view, half body, looking down, head down, hunched, slouching, armor, weapon, helmet, cape, boots, gauntlet, shield, equipment, decoration
 ```
 
 ### 3.2 女·基础体
 
 **{Prompt}**：
 ```
-(1girl:1.5), solo, full body sprite of female human, plain linen underwear, bare arms and legs, long brown hair, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character
+(1girl:1.5), solo, full body sprite of female human, plain linen underwear, bare arms and legs, long brown hair, head up looking forward, upright posture, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character
 ```
 
 **完整正面**：
 ```
-masterpiece, best quality, amazing quality, 4k, very aesthetic, ultra-detailed, (pixel art, dithering, pixelated, sprite art, 8-bit:1.2), (1girl:1.5), solo, full body sprite of female human, plain linen underwear, bare arms and legs, long brown hair, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character, BREAK, depth of field, volumetric lighting
+masterpiece, best quality, amazing quality, 4k, very aesthetic, ultra-detailed, (pixel art, dithering, pixelated, sprite art, 8-bit:1.2), (1girl:1.5), solo, full body sprite of female human, plain linen underwear, bare arms and legs, long brown hair, head up looking forward, upright posture, A-pose, standing with feet visible, front 3/4 angle facing camera, dark fantasy character, BREAK, depth of field, volumetric lighting
 ```
 
-**负面（官方 + 性别反制 + 装备反制）**：
+**负面（官方 + 性别反制 + 姿势反制 + 装备反制）**：
 ```
-modern, recent, old, oldest, anime, illustration, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured, long body, lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, cropped, very displeasing, (worst quality, bad quality:1.2), sketch, jpeg artifacts, signature, watermark, username, signature, simple background, conjoined, bad ai-generated, 1boy, muscular, beard, back view, half body, armor, weapon, helmet, cape, boots, gauntlet, shield, equipment, decoration
+modern, recent, old, oldest, anime, illustration, cartoon, graphic, text, painting, crayon, graphite, abstract, glitch, deformed, mutated, ugly, disfigured, long body, lowres, bad anatomy, bad hands, missing fingers, extra digits, fewer digits, cropped, very displeasing, (worst quality, bad quality:1.2), sketch, jpeg artifacts, signature, watermark, username, signature, simple background, conjoined, bad ai-generated, 1boy, muscular, beard, back view, half body, looking down, head down, hunched, slouching, armor, weapon, helmet, cape, boots, gauntlet, shield, equipment, decoration
 ```
 
 ---
